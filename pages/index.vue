@@ -1,14 +1,30 @@
 <template>
   <div class="bg-gray-50 min-h-screen pb-6 relative">
-
     <!-- Header -->
-    <div class="bg-white px-4 py-4 shadow-sm">
+    <div class="bg-white px-4 py-4 shadow-sm sticky top-0 z-10">
       <div class="flex items-center justify-between">
-        <app-logo class="w-32"/>
-        
+        <app-logo class="w-32" />
+
         <!-- Nome bambino selezionato -->
-        <div v-if="bambinoSelezionato" class="text-primary font-medium">
+        <div
+          v-if="bambinoSelezionato"
+          class="text-green-700 font-light px-4 py-2 flex items-center"
+        >
           {{ bambinoSelezionato.nome }}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-4 h-4 ml-1 text-green-700"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
         </div>
       </div>
 
@@ -26,8 +42,8 @@
         v-else-if="user && bambini.length > 0 && !bambinoSelezionato"
         class="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-lg border border-yellow-200"
       >
-        Seleziona un bambino nella sezione profilo per visualizzare gli
-        alimenti consigliati.
+        Seleziona un bambino nella sezione profilo per visualizzare gli alimenti
+        consigliati.
       </div>
 
       <!-- Search Bar -->
@@ -54,61 +70,28 @@
           type="text"
           v-model="testoDiRicerca"
           placeholder="Cerca alimento..."
-          class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+          class="outline-none pl-10 pr-4 py-2 w-full border-b border-gray-300"
         />
       </div>
 
       <!-- Filters -->
       <div class="mt-4 flex flex-wrap gap-2">
         <!-- Categorie -->
-        <select
-          v-model="categoriaSelezionata"
-          class="rounded-lg border border-gray-300 px-3 py-1 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+        <div
+          class="flex items-center space-x-2 overflow-auto w-full whitespace-nowrap"
         >
-          <option value="">Tutte le categorie</option>
-          <option
+          <button
             v-for="categoria in categorie"
             :key="categoria.id"
-            :value="categoria.id"
+            class="rounded-full shadow-lg px-4 py-1 text-sm"
+            :class="{
+              'bg-primary/20': categoria.id === categoriaSelezionata,
+              'bg-white': categoria.id !== categoriaSelezionata,
+            }"
+            @click="selezionaCategoria(categoria.id)"
           >
+            {{ categoria.icona }}
             {{ categoria.nome }}
-          </option>
-        </select>
-
-        <!-- Stato (assaggiato/da provare) -->
-        <div class="flex rounded-lg border border-gray-300 overflow-hidden">
-          <button
-            @click="statoFiltro = 'tutti'"
-            :class="[
-              'px-3 py-1 text-sm',
-              statoFiltro === 'tutti'
-                ? 'bg-primary text-white'
-                : 'bg-white text-gray-700',
-            ]"
-          >
-            Tutti
-          </button>
-          <button
-            @click="statoFiltro = 'da-provare'"
-            :class="[
-              'px-3 py-1 text-sm',
-              statoFiltro === 'da-provare'
-                ? 'bg-primary text-white'
-                : 'bg-white text-gray-700',
-            ]"
-          >
-            Da provare
-          </button>
-          <button
-            @click="statoFiltro = 'assaggiati'"
-            :class="[
-              'px-3 py-1 text-sm',
-              statoFiltro === 'assaggiati'
-                ? 'bg-primary text-white'
-                : 'bg-white text-gray-700',
-            ]"
-          >
-            Assaggiati
           </button>
         </div>
       </div>
@@ -143,7 +126,6 @@
             :key="alimento.id"
             :alimento="alimento"
             @toggle="toggleAssaggiato"
-            @add-note="openNoteModal"
             class="border-l-4 border-indigo-400"
           />
         </div>
@@ -151,7 +133,7 @@
 
       <!-- Lista alimenti -->
       <div class="mt-6 px-4">
-        <h2 class="text-lg font-medium mb-3">Tutti gli alimenti</h2>
+        <h2 class="text-lg font-medium mb-3">Alimenti da assaggiare</h2>
 
         <div
           v-if="error"
@@ -173,63 +155,12 @@
             :key="alimento.id"
             :alimento="alimento"
             @toggle="toggleAssaggiato"
-            @add-note="openNoteModal"
           />
         </div>
       </div>
     </template>
 
     <!-- Modale per le note -->
-    <div v-if="showNoteModal" class="fixed inset-0 z-50 overflow-y-auto">
-      <div
-        class="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
-        @click="closeNoteModal"
-      ></div>
-      <div class="flex min-h-full items-center justify-center p-4">
-        <div
-          class="bg-white rounded-xl w-full max-w-md p-6 shadow-xl transform transition-all duration-300 ease-in-out"
-        >
-          <h3 class="text-xl font-semibold mb-4 text-gray-800">
-            {{ alimentoSelezionato?.nome }}
-          </h3>
-
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Note personali</label
-            >
-            <textarea
-              v-model="noteTemp"
-              rows="4"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-              placeholder="Aggiungi qui le tue note (es. reazioni, preferenze...)"
-            ></textarea>
-          </div>
-          
-          <div class="mb-4">
-            <div class="flex items-center">
-              <ion-toggle v-model="isAllergicTemp" label-placement="end">
-                Reazione allergica
-              </ion-toggle>
-            </div>
-          </div>
-
-          <div class="flex justify-end space-x-3">
-            <button
-              @click="closeNoteModal"
-              class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              Annulla
-            </button>
-            <button
-              @click="saveNote"
-              class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
-            >
-              Salva
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -247,7 +178,6 @@ const isLoading = ref(false);
 const error = ref(null);
 // Filtraggio
 const categoriaSelezionata = ref("");
-const statoFiltro = ref("tutti"); // 'tutti', 'da-provare', 'assaggiati'
 const testoDiRicerca = ref("");
 
 // Modale per le note
@@ -278,7 +208,7 @@ async function fetchAlimenti() {
 
   isLoading.value = true;
   error.value = null;
-  console.log('Caricamento alimenti per bambino:', bambinoSelezionato.value.id);
+  console.log("Caricamento alimenti per bambino:", bambinoSelezionato.value.id);
 
   try {
     // Ottiene l'elenco base degli alimenti
@@ -296,7 +226,7 @@ async function fetchAlimenti() {
 
     if (assaggiatiError) throw assaggiatiError;
 
-    console.log('Alimenti assaggiati trovati:', assaggiatiData.length);
+    console.log("Alimenti assaggiati trovati:", assaggiatiData.length);
 
     // Combina i dati: marca come assaggiati quelli presenti in alimenti_bambini
     // e aggiunge le note se presenti
@@ -308,7 +238,7 @@ async function fetchAlimenti() {
         ...alimento,
         assaggiato: !!alimentoAssaggiato,
         nota_personale: alimentoAssaggiato?.nota_personale || "",
-        is_allergic: alimentoAssaggiato?.is_allergic || false
+        is_allergic: alimentoAssaggiato?.is_allergic || false,
       };
     });
 
@@ -319,6 +249,14 @@ async function fetchAlimenti() {
   } finally {
     isLoading.value = false;
   }
+}
+
+function selezionaCategoria(id) {
+  if (categoriaSelezionata.value === id) {
+    categoriaSelezionata.value = "";
+    return;
+  }
+  categoriaSelezionata.value = id;
 }
 
 // Funzione per aggiornare lo stato di un alimento
@@ -363,74 +301,18 @@ async function toggleAssaggiato(id) {
   }
 }
 
-// Funzione per aggiornare la nota di un alimento
-async function aggiungiNota(id, nota, isAllergic) {
-  if (!user.value || !bambinoSelezionato.value) return;
-
-  const index = alimenti.value.findIndex((alimento) => alimento.id === id);
-  if (index === -1) return;
-
-  try {
-    if (alimenti.value[index].assaggiato) {
-      // Aggiorna la nota nella tabella alimenti_bambini
-      const { error: updateError } = await supabase
-        .from("alimenti_bambini")
-        .update({
-          nota_personale: nota,
-          is_allergic: isAllergic,
-          modificato_il: new Date().toISOString(),
-        })
-        .eq("bambino_id", bambinoSelezionato.value.id)
-        .eq("alimento_id", id);
-
-      if (updateError) throw updateError;
-    } else {
-      // Se non è ancora assaggiato, prima lo marca come assaggiato
-      // e poi inserisce con la nota
-      const { error: insertError } = await supabase
-        .from("alimenti_bambini")
-        .insert({
-          bambino_id: bambinoSelezionato.value.id,
-          alimento_id: id,
-          nota_personale: nota,
-          is_allergic: isAllergic,
-          assaggiato: true,
-          creato_il: new Date().toISOString(),
-          modificato_il: new Date().toISOString(),
-        });
-
-      if (insertError) throw insertError;
-
-      // Aggiorna anche lo stato di assaggio
-      alimenti.value[index].assaggiato = true;
-    }
-
-    // Aggiorna la nota localmente
-    alimenti.value[index].nota_personale = nota;
-    alimenti.value[index].is_allergic = isAllergic;
-  } catch (err) {
-    console.error("Errore nell'aggiornamento della nota:", err);
-  }
-}
-
 // Filtro per categoria
 const alimentiFiltrati = computed(() => {
-  if (!categoriaSelezionata.value) {
-    return alimenti.value;
-  }
-  return alimenti.value.filter(
-    (alimento) => alimento.categoria_id === categoriaSelezionata.value
-  );
-});
+  let risultati = alimenti.value;
 
-// Filtro per stato (assaggiato o meno)
-const alimentiPerStato = computed(() => {
-  let risultati = alimentiFiltrati.value;
+  // Filtra sempre per mostrare solo gli alimenti da provare
+  risultati = risultati.filter((alimento) => !alimento.assaggiato);
 
-  if (statoFiltro.value === "da-provare") {
-    risultati = risultati.filter((alimento) => !alimento.assaggiato);
-  } else if (statoFiltro.value === "assaggiati") {
-    risultati = risultati.filter((alimento) => alimento.assaggiato);
+  // Applica il filtro per categoria se selezionata
+  if (categoriaSelezionata.value) {
+    risultati = risultati.filter(
+      (alimento) => alimento.categoria_id === categoriaSelezionata.value
+    );
   }
 
   return risultati;
@@ -439,11 +321,11 @@ const alimentiPerStato = computed(() => {
 // Ricerca per nome
 const alimentiRicerca = computed(() => {
   if (!testoDiRicerca.value.trim()) {
-    return alimentiPerStato.value;
+    return alimentiFiltrati.value;
   }
 
   const termineRicerca = testoDiRicerca.value.toLowerCase();
-  return alimentiPerStato.value.filter((alimento) =>
+  return alimentiFiltrati.value.filter((alimento) =>
     alimento.nome.toLowerCase().includes(termineRicerca)
   );
 });
@@ -513,66 +395,6 @@ const alimentiConsigliati = computed(() => {
   );
 });
 
-function openNoteModal(alimento) {
-  alimentoSelezionato.value = alimento;
-  noteTemp.value = alimento.nota_personale || "";
-  isAllergicTemp.value = alimento.is_allergic || false;
-  showNoteModal.value = true;
-}
-
-function closeNoteModal() {
-  showNoteModal.value = false;
-}
-
-async function saveNote() {
-  if (alimentoSelezionato.value) {
-    await aggiungiNota(alimentoSelezionato.value.id, noteTemp.value, isAllergicTemp.value);
-    closeNoteModal();
-  }
-}
-
-// Funzione per calcolare l'età formattata di un qualsiasi bambino (per il dropdown)
-function calcolaEtaFormattata(bambino) {
-  if (!bambino || !bambino.data_nascita) {
-    return "Età non disponibile";
-  }
-
-  const oggi = new Date();
-  const nascita = new Date(bambino.data_nascita);
-
-  let mesi = (oggi.getFullYear() - nascita.getFullYear()) * 12;
-  mesi += oggi.getMonth() - nascita.getMonth();
-
-  // Calcola giorni
-  let giorni = oggi.getDate() - nascita.getDate();
-  if (giorni < 0) {
-    // Se siamo "prima" del giorno di nascita nel mese corrente
-    mesi--;
-    const ultimoGiornoMeseScorso = new Date(
-      oggi.getFullYear(),
-      oggi.getMonth(),
-      0
-    ).getDate();
-    giorni += ultimoGiornoMeseScorso;
-  }
-
-  let testo = "";
-
-  if (mesi === 1) {
-    testo = "1 mese";
-  } else if (mesi > 1) {
-    testo = `${mesi} mesi`;
-  }
-
-  if (giorni === 1) {
-    testo += testo ? " e 1 giorno" : "1 giorno";
-  } else if (giorni > 1) {
-    testo += testo ? ` e ${giorni} giorni` : `${giorni} giorni`;
-  }
-
-  return testo || "Appena nato";
-}
-
 // Caricamento dati all'avvio
 onMounted(async () => {
   await fetchCategorie();
@@ -581,17 +403,24 @@ onMounted(async () => {
 });
 
 // Aggiornamento alimenti quando cambia il bambino selezionato
-watch(() => bambinoSelezionato.value?.id, async (newBambinoId) => {
-  if (newBambinoId) {
-    console.log('ID del bambino selezionato cambiato in alimenti:', newBambinoId);
-    await fetchAlimenti();
-  } else {
-    console.log('Nessun bambino selezionato in alimenti');
-    alimenti.value = [];
-  }
-}, { immediate: true });
+watch(
+  () => bambinoSelezionato.value?.id,
+  async (newBambinoId) => {
+    if (newBambinoId) {
+      console.log(
+        "ID del bambino selezionato cambiato in alimenti:",
+        newBambinoId
+      );
+      await fetchAlimenti();
+    } else {
+      console.log("Nessun bambino selezionato in alimenti");
+      alimenti.value = [];
+    }
+  },
+  { immediate: true }
+);
 
 definePageMeta({
-  middleware: 'auth'
-})
+  middleware: "auth",
+});
 </script>

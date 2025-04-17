@@ -1,47 +1,47 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="h-full flex flex-col bg-gray-50">
     <div class="flex-1 flex flex-col">
       <!-- Contenuto principale -->
       <div class="flex-1 relative overflow-hidden">
         <!-- Step 1 - Piatto di spaghetti -->
         <div 
-          class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center transition-transform duration-300"
+          class="absolute inset-0 flex flex-col items-center justify-center px-8 pt-8 text-center transition-transform duration-300"
           :style="{ transform: `translateX(${(currentStep - 1) * -100}%)` }"
         >
           <div class="w-64 h-64 bg-indigo-100 rounded-full flex items-center justify-center mb-8">
            <img src="~/assets/img/1.svg" alt="Illustration 1" class="w-full h-full object-cover">
           </div>
           <h2 class="text-2xl font-bold text-gray-800 mb-4">Benvenuto in Svezzy!</h2>
-          <p class="text-gray-600 mb-2">Svezzy ti aiuta a seguire il percorso di svezzamento del tuo bambino in modo semplice e intuitivo.</p>
+          <p class="text-gray-600 ">Svezzy ti aiuta a seguire il percorso di svezzamento del tuo bambino in modo semplice e intuitivo.</p>
         </div>
 
         <!-- Step 2 - Telefono -->
         <div 
-          class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center transition-transform duration-300"
+          class="absolute inset-0 flex flex-col items-center justify-center px-8 pt-8 text-center transition-transform duration-300"
           :style="{ transform: `translateX(${(currentStep - 2) * 100}%)` }"
         >
           <div class="w-64 h-64 bg-indigo-100 rounded-full flex items-center justify-center mb-8">
             <img src="~/assets/img/2.svg" alt="Illustration 1" class="w-full h-full object-cover">
           </div>
           <h2 class="text-2xl font-bold text-gray-800 mb-4">Organizza gli alimenti</h2>
-          <p class="text-gray-600 mb-2">Tieni traccia di tutti gli alimenti che il tuo bambino ha assaggiato, con informazioni su allergie e note personali.</p>
+          <p class="text-gray-600 ">Tieni traccia di tutti gli alimenti che il tuo bambino ha assaggiato, con informazioni su allergie e note personali.</p>
         </div>
 
         <!-- Step 3 - Due bambini -->
         <div 
-          class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center transition-transform duration-300"
+          class="absolute inset-0 flex flex-col items-center justify-center px-8 pt-8 text-center transition-transform duration-300"
           :style="{ transform: `translateX(${(currentStep - 3) * 100}%)` }"
         >
           <div class="w-64 h-64 bg-indigo-100 rounded-full flex items-center justify-center mb-8">
             <img src="~/assets/img/3.svg" alt="Illustration 1" class="w-full h-full object-cover">
           </div>
           <h2 class="text-2xl font-bold text-gray-800 mb-4">Personalizza l'esperienza</h2>
-          <p class="text-gray-600 mb-2">Registra più bambini e personalizza i loro percorsi di svezzamento in base alle loro esigenze specifiche.</p>
+          <p class="text-gray-600 ">Registra più bambini e personalizza i loro percorsi di svezzamento in base alle loro esigenze specifiche.</p>
         </div>
       </div>
 
       <!-- Navigazione e indicatori -->
-      <div class="p-8">
+      <div class="px-8 pb-16">
         <!-- Indicatori di step personalizzati -->
         <div class="flex justify-center space-x-2 mb-8">
           <div 
@@ -49,33 +49,26 @@
             :key="step"
             @click="goToStep(step)"
             :class="[
-              'h-3 w-3 rounded-full cursor-pointer transition-colors',
+              'h-1 w-6 rounded-full cursor-pointer transition-colors',
               currentStep === step ? 'bg-primary' : 'bg-gray-300'
             ]"
           ></div>
         </div>
 
         <div class="flex justify-between">
-          <button 
-            v-if="currentStep > 1" 
-            @click="goToStep(currentStep - 1)" 
-            class="text-primary py-2 px-4 rounded-lg hover:bg-indigo-50"
-          >
-            Indietro
-          </button>
-          <div v-else class="w-20"></div>
+          
           
           <button 
             v-if="currentStep < 3" 
             @click="goToStep(currentStep + 1)" 
-            class="bg-primary text-white py-2 px-6 rounded-lg hover:bg-indigo-700"
+            class="bg-primary text-white py-2 px-6 rounded-full w-full "
           >
             Avanti
           </button>
           <button 
             v-else 
             @click="finishWelcome" 
-            class="bg-primary text-white py-2 px-6 rounded-lg hover:bg-indigo-700"
+            class="bg-primary text-white py-2 px-6 rounded-full w-full "
           >
             Inizia
           </button>

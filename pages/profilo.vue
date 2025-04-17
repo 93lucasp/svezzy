@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-gray-50 min-h-screen pb-6">
+  <div class="bg-gray-50 min-h-screen pb-32">
     <!-- Header -->
     <div class="bg-white px-4 py-4 shadow-sm">
-      <app-logo class="w-32"/>
+      <app-logo class="w-32" />
     </div>
 
     <!-- Sezione Bambini -->
@@ -29,7 +29,7 @@
                 :class="[
                   'flex items-center justify-between p-4 hover:bg-gray-50 transition-colors',
                   bambinoSelezionato && bambino.id === bambinoSelezionato.id
-                    ? 'bg-indigo-50'
+                    ? 'bg-primary/10'
                     : '',
                 ]"
                 @click="selectBambino(bambino)"
@@ -123,19 +123,62 @@
     </div>
 
     <!-- Sezione Account -->
-    <div class="mt-6 px-4">
-      <button
-        @click="showSuggestionModal = true"
-        class="w-full flex justify-center py-2 px-4 border border-indigo-300 rounded-md text-primary hover:bg-indigo-50 mb-4"
-      >
-        Segnala un alimento mancante
-      </button>
-      <button
-        @click="showDonationModal = true"
-        class="w-full flex justify-center py-2 px-4 border border-yellow-300 rounded-md text-yellow-700 hover:bg-yellow-50 mt-6"
-      >
-        <span class="mr-2">💪</span> Supporta lo sviluppo del progetto
-      </button>
+    <div class="mt-6 px-4 space-y-4">
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-lg font-medium mb-4">Svezzy</h2>
+
+        <div class="space-y-4">
+          <button
+            @click="showSuggestionModal = true"
+            class="text-left w-full p-4 rounded-lg bg-gray-50 text-gray-700 hover:bg-gray-50 flex items-center justify-between"
+          >
+            <div
+              class="flex items-center"
+              @click="showSuggestionModal = true"
+            >
+              Segnala un alimento mancante
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
+
+          <button
+            @click="showDonationModal = true"
+            class="text-left w-full p-4 rounded-lg bg-gray-50 text-gray-700 hover:bg-gray-50 flex items-center justify-between"
+          >
+            <div class="flex items-center">
+              <span class="mr-2">💪</span> Supporta lo sviluppo del progetto
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
       <div class="bg-white rounded-lg shadow-sm p-6">
         <h2 class="text-lg font-medium mb-4">Account</h2>
 
@@ -170,21 +213,81 @@
 
           <button
             @click="navigateTo('/new-password')"
-            class="w-full flex justify-center py-2 px-4 border border-primary rounded-md text-primary hover:bg-indigo-50"
+            class="text-left w-full p-4 rounded-lg bg-gray-50 text-gray-700 hover:bg-gray-50 flex items-center justify-between"
           >
-            Modifica password
+            <div class="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5 mr-2 text-gray-500"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                />
+              </svg>
+              Modifica password
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
           </button>
 
           <button
             @click="logout"
-            class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+            class="text-left w-full p-4 rounded-lg bg-gray-50 text-gray-700 hover:bg-gray-50 flex items-center justify-between"
           >
-            Esci
+            <div class="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5 mr-2 text-gray-500"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+                />
+              </svg>
+              Esci
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 text-gray-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
           </button>
 
           <button
             @click="showDeleteConfirmation = true"
-            class="w-full flex justify-center py-2 px-4 border border-red-300 rounded-md text-red-600 hover:bg-red-50"
+            class="w-full text-red-600 text-sm"
           >
             Elimina account
           </button>
@@ -221,8 +324,9 @@
               <input
                 id="babyName"
                 type="text"
+                placeholder="Mario Rossi"
                 v-model="editableBabyData.nome"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                class="w-full py-2 border-b border-gray-300"
               />
             </div>
 
@@ -237,7 +341,7 @@
                 id="birthDate"
                 type="date"
                 v-model="editableBabyData.dataNascita"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                class="w-full py-2 border-b border-gray-300"
               />
             </div>
 
@@ -253,8 +357,8 @@
                   :class="[
                     'flex-1 py-3 px-4 rounded-lg border-2 flex flex-col items-center transition-colors',
                     editableBabyData.sesso === 'M'
-                      ? 'border-indigo-600 bg-indigo-50'
-                      : 'border-gray-200 hover:border-indigo-200',
+                      ? 'border-primary bg-primary/20'
+                      : 'border-gray-200 ',
                   ]"
                 >
                   <span class="text-2xl mb-1">👦</span>
@@ -267,8 +371,8 @@
                   :class="[
                     'flex-1 py-3 px-4 rounded-lg border-2 flex flex-col items-center transition-colors',
                     editableBabyData.sesso === 'F'
-                      ? 'border-indigo-600 bg-indigo-50'
-                      : 'border-gray-200 hover:border-indigo-200',
+                      ? 'border-primary bg-primary/20'
+                      : 'border-gray-200 ',
                   ]"
                 >
                   <span class="text-2xl mb-1">👧</span>
@@ -281,13 +385,13 @@
               <button
                 type="button"
                 @click="closeEditModal"
-                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                class="px-6 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Annulla
               </button>
               <button
                 type="submit"
-                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
+                class="px-8 py-2 bg-primary text-white rounded-full transition-colors shadow-md"
               >
                 Salva
               </button>
@@ -407,15 +511,15 @@
             <div>
               <label
                 for="foodName"
-                class="block text-sm font-medium text-gray-700 mb-1"
+                class="block text-sm font-medium text-gray-700"
                 >Nome alimento</label
               >
               <input
                 id="foodName"
                 type="text"
                 v-model="suggestionData.nomeAlimento"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                placeholder="Es. Yogurt al cocco, Gallette di riso, ecc."
+                class="w-full py-2 border-b border-gray-300"
+                placeholder="Es. Cocco"
                 required
               />
             </div>
@@ -424,13 +528,13 @@
               <button
                 type="button"
                 @click="closeSuggestionModal"
-                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                class="outline-none px-4 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Annulla
               </button>
               <button
                 type="submit"
-                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
+                class="px-6 py-2 bg-primary text-white rounded-full shadow-md"
                 :disabled="isSendingSuggestion"
               >
                 {{
@@ -456,10 +560,10 @@
           class="bg-white rounded-xl w-full max-w-md p-6 shadow-xl transform transition-all duration-300 ease-in-out"
         >
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-semibold text-yellow-600">
-              Supporta Svezzy
+            <h3 class="text-xl font-semibold">
+              Supporta <span class="text-primary">Svezzy</span> 
             </h3>
-            <button 
+            <button
               @click="showDonationModal = false"
               class="p-1.5 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
             >
@@ -479,25 +583,25 @@
               </svg>
             </button>
           </div>
-          
+
           <p class="mb-4 text-gray-600">
             Essendo un neo genitore ho avuto l'esigenza di avere un'app come
             Svezzy per tenere traccia dei progressi dello svezzamento del mio
             piccolo, cosi ho deciso di crearla ed ho detto: "Perché non renderla
             disponibile a tutti?"
           </p>
-          
+
           <p class="mb-4 text-gray-600">
             Così ho deciso di metterla online in modo completamente gratuito. Se
             la trovi utile e hai piacere a supportare i futuri sviluppi, puoi
             supportare lo sviluppo con una piccola donazione.
           </p>
-          
+
           <div class="flex justify-center mt-6 mb-4">
-            <a 
-              href="https://www.buymeacoffee.com/lucachka" 
+            <a
+              href="https://www.buymeacoffee.com/lucachka"
               target="_blank"
-              class="inline-flex items-center px-5 py-3 rounded-lg bg-yellow-500 text-white font-medium hover:bg-yellow-600 transition-colors shadow-md"
+              class="w-full flex items-center justify-center px-5 py-3 rounded-full bg-primary text-white font-medium shadow-md"
             >
               <span class="text-xl mr-2">💪</span>
               Supporta
@@ -513,10 +617,12 @@
         v-if="showToast"
         :class="[
           'fixed top-4 inset-x-4 px-6 py-3 rounded-lg shadow-lg z-50 max-w-md',
-          toastType === 'success' ? 'bg-green-600' : 'bg-red-600',
+          toastType === 'success'
+            ? 'bg-green-50 border-green-600'
+            : 'bg-red-50 border-red-600',
         ]"
       >
-        <div class="flex items-center text-white">
+        <div class="flex items-center">
           <span v-if="toastType === 'success'" class="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -644,9 +750,13 @@ function modificaBambino() {
 // Funzione per selezionare un bambino
 function selectBambino(bambino) {
   selezionaBambino(bambino);
-  
+
   // Mostra una conferma visiva all'utente
-  displayToast(`Hai selezionato ${bambino.nome} come bambino attivo`, "success", 3000);
+  displayToast(
+    `Hai selezionato ${bambino.nome} come bambino attivo`,
+    "success",
+    3000
+  );
 }
 
 // Funzione per modificare un bambino specifico tramite ID
@@ -837,7 +947,7 @@ async function deleteAccount() {
 
     // Non è necessario fare logout perché l'utente è già stato eliminato
     // Semplicemente reindirizza alla home
-    navigateTo("/");
+    navigateTo("/login");
   } catch (err) {
     console.error("Errore durante l'eliminazione dell'account:", err);
     displayToast(

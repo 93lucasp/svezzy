@@ -6,8 +6,22 @@
         <app-logo class="w-32"/>
         
         <!-- Nome bambino selezionato -->
-        <div v-if="bambinoSelezionato" class="text-primary font-medium">
+        <div v-if="bambinoSelezionato" class="text-green-700 font-light px-4 py-2 flex items-center">
           {{ bambinoSelezionato.nome }}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-4 h-4 ml-1 text-green-700"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
         </div>
       </div>
       
@@ -32,27 +46,37 @@
           type="text" 
           v-model="testoDiRicerca" 
           placeholder="Cerca alimento..." 
-          class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+          class="outline-none pl-10 pr-4 py-2 w-full  border-b border-gray-300"
         />
       </div>
       
       <!-- Filters -->
       <div class="mt-4 flex flex-wrap gap-2">
         <!-- Categorie -->
-        <select 
-          v-model="categoriaSelezionata" 
-          class="rounded-lg border border-gray-300 px-3 py-1 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+        <div
+          class="flex items-center space-x-2 overflow-auto w-full whitespace-nowrap "
         >
-          <option value="">Tutte le categorie</option>
-          <option v-for="categoria in categorie" :key="categoria.id" :value="categoria.id">
+          <button
+            v-for="categoria in categorie"
+            :key="categoria.id"
+            class="rounded-full shadow-lg px-4 py-1 text-sm"
+            :class="{
+              'bg-primary/20': categoria.id === categoriaSelezionata,
+              'bg-white': categoria.id !== categoriaSelezionata,
+            }"
+            @click="selezionaCategoria(categoria.id)"
+          >
+            {{ categoria.icona }}
             {{ categoria.nome }}
-          </option>
-        </select>
+          </button>
+        </div>
       </div>
     </div>
     
     <!-- Lista alimenti assaggiati -->
     <div class="mt-6 px-4">
+      <h2 class="text-lg font-medium mb-3">Alimenti assaggiati</h2>
+
       <div v-if="isLoading" class="bg-white rounded-lg shadow-sm p-8 text-center text-gray-500">
         <div class="flex justify-center items-center">
           <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
@@ -191,7 +215,8 @@ async function fetchAlimentiAssaggiati() {
     const { data: assaggiatiData, error: assaggiatiError } = await supabase
       .from("alimenti_bambini")
       .select("*, alimenti(*)")
-      .eq("bambino_id", bambinoSelezionato.value.id);
+      .eq("bambino_id", bambinoSelezionato.value.id)
+      .order('creato_il', { ascending: false });
 
     if (assaggiatiError) throw assaggiatiError;
 
@@ -342,6 +367,15 @@ function calcolaEtaFormattata(bambino) {
   }
   
   return testo || 'Appena nato';
+}
+
+// Funzione per selezionare una categoria
+function selezionaCategoria(id) {
+  if (categoriaSelezionata.value === id) {
+    categoriaSelezionata.value = "";
+    return;
+  }
+  categoriaSelezionata.value = id;
 }
 
 // Caricamento dati all'avvio

@@ -7,25 +7,39 @@ export default defineNuxtPlugin(() => {
 
       // Gestisci il deeplink
       const url = new URL(data.url);
+      console.log('url::', url)
       const path = url.pathname;
       const queryParams = Object.fromEntries(url.searchParams.entries());
       const result = data.url.split('svezzy://')[1];
 
+      // Crea URL temporaneo per estrarre i parametri dall'hash
       const url2 = new URL(data.url.replace('svezzy://', 'https://placeholder.com'));
-      // Estrai access_token e refresh_token dall'hash
+      // Estrai parametri dall'hash
       const params = new URLSearchParams(url2.hash.substring(1)); // Rimuovi il `#`
-      const accessToken = params.get('access_token');
-      const refreshToken = params.get('refresh_token');
-      const supabase = useSupabaseClient();
-      try {
-        const { data } = await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: refreshToken
-        })
-        navigateTo(`/new-password`)
+      const type = params.get('type');
+      console.log('Tipo di deeplink:', type);
+
+      // Se il tipo è signup, naviga alla home
+      if (type === 'signup') {
+        console.log('Apertura app dopo signup');
+        return navigateTo('/');
       }
-      catch (error) {
-        console.log('Errore durante il settaggio della sessione:', error);
+
+      // Se il tipo è recovery, procedi con il recupero password
+      if (type === 'recovery') {
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+        const supabase = useSupabaseClient();
+        try {
+          const { data } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken
+          })
+          return navigateTo('/new-password');
+        }
+        catch (error) {
+          console.log('Errore durante il settaggio della sessione:', error);
+        }
       }
     }
   });

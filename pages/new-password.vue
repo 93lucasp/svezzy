@@ -29,14 +29,18 @@
         <form @submit.prevent="updatePassword" class="space-y-6">
           <!-- Nuova password -->
           <div>
-            <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              for="newPassword"
+              class="block text-sm font-medium text-gray-700"
+            >
               Nuova password
             </label>
             <input
               id="newPassword"
               type="password"
+              placeholder="********"
               v-model="passwordData.newPassword"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+              class="outline-none w-full  py-2 border-b border-gray-300 rounded-md focus:outline-none"
               required
               minlength="6"
             />
@@ -44,36 +48,40 @@
               La password deve contenere almeno 6 caratteri
             </p>
           </div>
-          
+
           <!-- Conferma nuova password -->
           <div>
-            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              for="confirmPassword"
+              class="block text-sm font-medium text-gray-700"
+            >
               Conferma nuova password
             </label>
             <input
               id="confirmPassword"
               type="password"
+              placeholder="********"
               v-model="passwordData.confirmPassword"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+              class="outline-none w-full  py-2 border-b border-gray-300 rounded-md focus:outline-none"
               required
             />
           </div>
-          
+
           <!-- Pulsanti -->
           <div class="flex justify-end space-x-3 pt-4">
             <button
               type="button"
               @click="navigateTo('/profilo')"
-              class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              class="px-4 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
             >
               Annulla
             </button>
             <button
               type="submit"
-              class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
+              class="px-6 py-2 bg-primary text-white rounded-full hover:bg-indigo-700 transition-colors shadow-md"
               :disabled="isSubmitting"
             >
-              {{ isSubmitting ? 'Aggiornamento...' : 'Aggiorna password' }}
+              {{ isSubmitting ? "Aggiornamento..." : "Aggiorna password" }}
             </button>
           </div>
         </form>
@@ -85,11 +93,13 @@
       <div
         v-if="showToast"
         :class="[
-          'fixed top-4 inset-x-4 px-6 py-3 rounded-lg shadow-lg z-50 max-w-md mx-auto',
-          toastType === 'success' ? 'bg-green-600' : 'bg-red-600',
+          'fixed top-4 inset-x-4 px-6 py-3 rounded-lg shadow-lg z-50 max-w-md mx-auto border',
+          toastType === 'success'
+            ? 'bg-green-50 border-green-600'
+            : 'bg-red-50 border-red-600',
         ]"
       >
-        <div class="flex items-center text-white">
+        <div class="flex items-center">
           <span v-if="toastType === 'success'" class="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -135,8 +145,8 @@ const user = useSupabaseUser();
 
 // Dati del form
 const passwordData = ref({
-  newPassword: '',
-  confirmPassword: '',
+  newPassword: "",
+  confirmPassword: "",
 });
 
 // Stato del form
@@ -168,7 +178,10 @@ async function updatePassword() {
   }
 
   if (passwordData.value.newPassword.length < 6) {
-    displayToast("La nuova password deve contenere almeno 6 caratteri", "error");
+    displayToast(
+      "La nuova password deve contenere almeno 6 caratteri",
+      "error"
+    );
     return;
   }
 
@@ -184,15 +197,15 @@ async function updatePassword() {
 
     // Reset del form
     passwordData.value = {
-      newPassword: '',
-      confirmPassword: '',
+      newPassword: "",
+      confirmPassword: "",
     };
 
     displayToast("Password aggiornata con successo", "success");
-    
+
     // Reindirizza alla pagina del profilo dopo un breve delay
     setTimeout(() => {
-      navigateTo('/profilo');
+      navigateTo("/profilo");
     }, 2000);
   } catch (error) {
     console.error("Errore durante l'aggiornamento della password:", error);

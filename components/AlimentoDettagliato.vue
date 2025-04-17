@@ -1,25 +1,26 @@
 <template>
   <div class="border-b border-gray-100 last:border-b-0">
     <div class="p-4 flex items-center">
-      <!-- Checkbox -->
+      <!-- Checkbox personalizzata -->
       <div class="flex-shrink-0 mr-3">
-        <input 
-          type="checkbox" 
-          :id="`alimento-${alimento.id}`" 
-          :checked="alimento.assaggiato"
-          @change="$emit('toggle', alimento.id)"
-          class="h-5 w-5 text-primary border-gray-300 rounded focus:ring-indigo-500"
-        />
+        <div class="custom-checkbox-container">
+          <input 
+            type="checkbox" 
+            :id="`alimento-${alimento.id}`" 
+            :checked="alimento.assaggiato"
+            @change="$emit('toggle', alimento.id)"
+            class="custom-checkbox"
+          />
+          <label :for="`alimento-${alimento.id}`" class="custom-checkbox-label"></label>
+        </div>
       </div>
       
       <!-- Informazioni alimento -->
       <div class="flex-1 min-w-0">
         <div class="block text-sm font-medium">
           {{ alimento.nome }} <span class="text-gray-400">({{ alimento.mese_introduzione }}+)</span>
-          <span v-if="alimento.allergeni" class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
-            <svg class="mr-0.5 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-            </svg>
+          <span v-if="alimento.allergeni" class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+          
             Allergene
           </span>
         </div>
@@ -124,4 +125,58 @@ const props = defineProps({
 defineEmits(['toggle', 'add-note']);
 
 const isExpanded = ref(false);
-</script> 
+</script>
+
+<style scoped>
+.custom-checkbox-container {
+  position: relative;
+  height: 20px;
+  width: 20px;
+}
+
+.custom-checkbox {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  margin: 0;
+}
+
+.custom-checkbox-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.custom-checkbox-label:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.custom-checkbox:checked ~ .custom-checkbox-label {
+  background-color: var(--color-primary, #6366F1);
+  border-color: var(--color-primary, #6366F1);
+}
+
+.custom-checkbox:checked ~ .custom-checkbox-label:after {
+  display: block;
+}
+
+.custom-checkbox:focus ~ .custom-checkbox-label {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+</style> 
