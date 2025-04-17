@@ -398,7 +398,17 @@ const alimentiConsigliati = computed(() => {
 // Caricamento dati all'avvio
 onMounted(async () => {
   await fetchCategorie();
+  console.log("bambini", bambini.value.length);
   // I bambini sono già caricati dal composable useBambini
+  // TODO 
+  setTimeout(() => {
+    // Se l'utente è autenticato ma non ha bambini registrati, reindirizzalo all'onboarding
+    if (bambini.value.length === 0) {
+      console.log("Nessun bambino registrato, reindirizzamento a onboarding");
+      return navigateTo("/onboarding");
+    }
+  }, 800);
+
   await fetchAlimenti();
 });
 

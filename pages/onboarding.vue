@@ -57,7 +57,7 @@
               :class="[
                 'py-2 px-6 rounded-full focus:outline-none ',
                 babyName
-                  ? 'bg-primary text-white hover:bg-indigo-700'
+                  ? 'bg-primary text-white'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed',
               ]"
             >

@@ -41,6 +41,28 @@ export default defineNuxtPlugin(() => {
           console.log('Errore durante il settaggio della sessione:', error);
         }
       }
+      
+      // Gestione autenticazione social (Google)
+      if (url2.hash && params.get('access_token')) {
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+        const provider = params.get('provider') || queryParams.provider;
+        
+        console.log('Login social completato:', provider || 'provider non specificato');
+        
+        const supabase = useSupabaseClient();
+        try {
+          const { data } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken
+          });
+          
+          console.log('Sessione impostata correttamente');
+          return navigateTo('/');
+        } catch (error) {
+          console.log('Errore durante il settaggio della sessione:', error);
+        }
+      }
     }
   });
 });
