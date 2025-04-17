@@ -2,7 +2,7 @@
   <div class="bg-gray-50 min-h-screen pb-6">
     <!-- Header -->
     <div class="bg-white px-4 py-4 shadow-sm">
-      <h1 class="text-xl font-semibold text-primary">Profilo</h1>
+      <app-logo class="w-32"/>
     </div>
 
     <!-- Sezione Bambini -->
@@ -167,6 +167,13 @@
               </div>
             </div>
           </div>
+
+          <button
+            @click="navigateTo('/new-password')"
+            class="w-full flex justify-center py-2 px-4 border border-primary rounded-md text-primary hover:bg-indigo-50"
+          >
+            Modifica password
+          </button>
 
           <button
             @click="logout"
@@ -637,6 +644,9 @@ function modificaBambino() {
 // Funzione per selezionare un bambino
 function selectBambino(bambino) {
   selezionaBambino(bambino);
+  
+  // Mostra una conferma visiva all'utente
+  displayToast(`Hai selezionato ${bambino.nome} come bambino attivo`, "success", 3000);
 }
 
 // Funzione per modificare un bambino specifico tramite ID

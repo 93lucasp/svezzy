@@ -71,6 +71,9 @@ const error = ref('');
 // Otteniamo il client Supabase
 const supabase = useSupabaseClient();
 
+// Cookie per verificare se l'utente ha già visto la pagina di benvenuto
+const hasSeenWelcome = useCookie('hasSeenWelcome');
+
 async function handleLogin() {
   error.value = '';
   isLoading.value = true;
@@ -83,14 +86,6 @@ async function handleLogin() {
     
     if (authError) throw authError;
     
-    // Verifica se l'utente ha già visto la welcome page
-    const hasSeenWelcome = useCookie('has-seen-welcome').value === 'true';
-    
-    if (!hasSeenWelcome) {
-      // Se l'utente non ha visto la welcome page, reindirizzalo lì
-      navigateTo('/welcome');
-      return;
-    }
     
     // Verifica se l'utente ha già dei bambini registrati
     const { data: bambini, error: bambiniError } = await supabase
@@ -107,7 +102,7 @@ async function handleLogin() {
       navigateTo('/onboarding');
     } else {
       // Altrimenti, reindirizzalo alla pagina alimenti
-      navigateTo('/alimenti');
+      navigateTo('/');
     }
   } catch (err) {
     error.value = 'Errore durante il login: ' + (err.message || 'Controlla le tue credenziali e riprova');
@@ -124,4 +119,12 @@ function navigateToForgotPassword() {
 function navigateToRegister() {
   navigateTo('/signup');
 }
+
+// Verifica se l'utente ha già visto la pagina di benvenuto
+onMounted(() => {
+  // Se l'utente non ha visto la pagina di benvenuto, reindirizzalo
+  if (!hasSeenWelcome.value || hasSeenWelcome.value !== true) {
+    navigateTo('/welcome');
+  }
+});
 </script>

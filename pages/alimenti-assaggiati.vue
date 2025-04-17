@@ -2,25 +2,23 @@
   <div class="bg-gray-50 min-h-screen pb-6">
     <!-- Header -->
     <div class="bg-white px-4 py-4 shadow-sm">
-      <h1 class="text-xl font-semibold text-primary">Alimenti Assaggiati</h1>
-      
-      <!-- Selezione bambino -->
-      <div v-if="bambini.length > 0" class="mt-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Bambino</label>
-        <select 
-          :value="bambinoSelezionato ? bambinoSelezionato.id : ''"
-          @change="selezionaBambinoById($event.target.value)"
-          class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option v-for="bambino in bambini" :key="bambino.id" :value="bambino.id" :selected="bambino.id === bambinoSelezionato?.id">
-            {{ bambino.nome }} ({{ calcolaEtaFormattata(bambino) }})
-          </option>
-        </select>
+      <div class="flex items-center justify-between">
+        <app-logo class="w-32"/>
+        
+        <!-- Nome bambino selezionato -->
+        <div v-if="bambinoSelezionato" class="text-primary font-medium">
+          {{ bambinoSelezionato.nome }}
+        </div>
       </div>
       
       <!-- Messaggio se non ci sono bambini -->
-      <div v-else-if="user" class="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-lg border border-yellow-200">
+      <div v-if="user && (!bambini || bambini.length === 0)" class="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-lg border border-yellow-200">
         Aggiungi prima un bambino nella sezione profilo per visualizzare gli alimenti assaggiati.
+      </div>
+      
+      <!-- Messaggio se non è selezionato nessun bambino -->
+      <div v-else-if="user && bambini.length > 0 && !bambinoSelezionato" class="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-lg border border-yellow-200">
+        Seleziona un bambino nella sezione profilo per visualizzare gli alimenti assaggiati.
       </div>
       
       <!-- Search Bar -->
@@ -114,6 +112,14 @@
             ></textarea>
           </div>
           
+          <div class="mb-4">
+            <div class="flex items-center">
+              <ion-toggle v-model="isAllergicTemp" label-placement="end">
+                Reazione allergica
+              </ion-toggle>
+            </div>
+          </div>
+          
           <div class="flex justify-end space-x-3">
             <button 
               @click="closeNoteModal" 
@@ -138,7 +144,7 @@
 // Client Supabase e utente
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
-const { bambini, bambinoSelezionato, selezionaBambino, selezionaBambinoById } = useBambini();
+const { bambini, bambinoSelezionato } = useBambini();
 
 // Stato
 const alimentiAssaggiati = ref([]);
@@ -154,6 +160,7 @@ const testoDiRicerca = ref('');
 const showNoteModal = ref(false);
 const alimentoSelezionato = ref(null);
 const noteTemp = ref('');
+const isAllergicTemp = ref(false);
 
 // Carica tutte le categorie
 async function fetchCategorie() {
@@ -196,6 +203,7 @@ async function fetchAlimentiAssaggiati() {
         ...record.alimenti,
         assaggiato: true,
         nota_personale: record.nota_personale || "",
+        is_allergic: record.is_allergic || false
       };
     });
 
@@ -230,7 +238,7 @@ async function toggleAssaggiato(id) {
 }
 
 // Funzione per aggiornare la nota di un alimento
-async function aggiungiNota(id, nota) {
+async function aggiungiNota(id, nota, is_allergic) {
   if (!user.value || !bambinoSelezionato.value) return;
   
   const index = alimentiAssaggiati.value.findIndex(alimento => alimento.id === id);
@@ -242,6 +250,7 @@ async function aggiungiNota(id, nota) {
       .from('alimenti_bambini')
       .update({ 
         nota_personale: nota,
+        is_allergic: is_allergic,
         modificato_il: new Date().toISOString()
       })
       .eq('bambino_id', bambinoSelezionato.value.id)
@@ -251,6 +260,7 @@ async function aggiungiNota(id, nota) {
     
     // Aggiorna la nota localmente
     alimentiAssaggiati.value[index].nota_personale = nota;
+    alimentiAssaggiati.value[index].is_allergic = is_allergic;
   } catch (err) {
     console.error('Errore nell\'aggiornamento della nota:', err);
   }
@@ -281,6 +291,7 @@ const alimentiAssaggiatiRicerca = computed(() => {
 function openNoteModal(alimento) {
   alimentoSelezionato.value = alimento;
   noteTemp.value = alimento.nota_personale;
+  isAllergicTemp.value = alimento.is_allergic || false;
   showNoteModal.value = true;
 }
 
@@ -290,7 +301,7 @@ function closeNoteModal() {
 
 async function saveNote() {
   if (alimentoSelezionato.value) {
-    await aggiungiNota(alimentoSelezionato.value.id, noteTemp.value);
+    await aggiungiNota(alimentoSelezionato.value.id, noteTemp.value, isAllergicTemp.value);
     closeNoteModal();
   }
 }

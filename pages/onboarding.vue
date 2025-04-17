@@ -220,7 +220,7 @@ async function finishOnboarding() {
     console.log('Bambino salvato:', data);
     
     // Vai alla pagina principale dopo l'onboarding
-    navigateTo('/alimenti');
+    navigateTo('/');
   } catch (err) {
     error.value = 'Errore durante il salvataggio: ' + (err.message || 'Riprova più tardi');
     console.error('Errore salvataggio bambino:', err);

@@ -29,7 +29,7 @@
       </div>
       
       <!-- Pulsante nota -->
-      <button 
+      <!-- <button 
         @click="$emit('add-note', alimento)" 
         class="ml-3 flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full text-gray-400 hover:text-primary hover:bg-indigo-50"
       >
@@ -50,7 +50,7 @@
             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
           ></path>
         </svg>
-      </button>
+      </button> -->
       
       <!-- Pulsante espandi -->
       <button 
@@ -82,6 +82,7 @@
       <div v-if="alimento.nota_personale" class="text-sm bg-gray-50 rounded-md p-3 text-gray-600 border-l-2 border-yellow-500">
         <div class="font-medium text-xs mb-1 text-gray-500">Note personali:</div>
         {{ alimento.nota_personale }}
+       
       </div>
     </div>
     

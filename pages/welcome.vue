@@ -87,9 +87,10 @@
 
 <script setup>
 const currentStep = ref(1);
-const hasSeenWelcome = useCookie('has-seen-welcome', {
-  maxAge: 60 * 60 * 24 * 365 * 5, // 5 anni in secondi
-  path: '/',
+
+// Cookie per memorizzare se l'utente ha già visto la pagina di benvenuto
+const hasSeenWelcome = useCookie('hasSeenWelcome', {
+  maxAge: 60 * 60 * 24 * 365, // Valido per un anno
   sameSite: true
 });
 
@@ -125,29 +126,18 @@ function goToStep(step) {
 
 function finishWelcome() {
   // Imposta il cookie per indicare che l'utente ha visto la welcome page
-  hasSeenWelcome.value = 'true';
+  hasSeenWelcome.value = true;
   
   // Reindirizza alla pagina di login
-  navigateTo('/');
+  navigateTo('/login');
 }
 
-// Controlla se l'utente ha già visto la welcome page
+// Aggiungi gli event listener per il touch
 onMounted(() => {
-  // Aggiungi gli event listener per il touch
   const mainContent = document.querySelector('.min-h-screen');
   if (mainContent) {
     mainContent.addEventListener('touchstart', handleTouchStart);
     mainContent.addEventListener('touchend', handleTouchEnd);
-  }
-  
-  if (hasSeenWelcome.value === 'true') {
-    // Se l'ha già vista, reindirizza
-    const user = useSupabaseUser();
-    if (user.value) {
-      navigateTo('/alimenti');
-    } else {
-      navigateTo('/');
-    }
   }
 });
 
