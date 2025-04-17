@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col items-center justify-center px-4 bg-gray-50">
     <div class="w-full max-w-md">
-      <h1 class="text-3xl font-bold text-center text-indigo-600 mb-8">Svezzy</h1>
+      <h1 class="text-3xl font-bold text-center text-primary mb-8">Svezzy</h1>
       
       <div class="bg-white p-8 rounded-lg shadow-md">
         <div class="flex justify-between items-center mb-8">
@@ -13,7 +13,7 @@
               :class="[
                 'h-2 w-8 rounded-full',
                 currentStep === step 
-                  ? 'bg-indigo-600' 
+                  ? 'bg-primary' 
                   : currentStep > step 
                     ? 'bg-indigo-300' 
                     : 'bg-gray-200'
@@ -51,7 +51,7 @@
               :class="[
                 'py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
                 babyName 
-                  ? 'bg-indigo-600 text-white hover:bg-indigo-700' 
+                  ? 'bg-primary text-white hover:bg-indigo-700' 
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               ]"
             >
@@ -80,7 +80,7 @@
           <div class="flex justify-between">
             <button 
               @click="prevStep" 
-              class="text-indigo-600 py-2 px-4 hover:text-indigo-800 focus:outline-none"
+              class="text-primary py-2 px-4 hover:text-indigo-800 focus:outline-none"
             >
               Indietro
             </button>
@@ -91,7 +91,7 @@
               :class="[
                 'py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
                 birthDate 
-                  ? 'bg-indigo-600 text-white hover:bg-indigo-700' 
+                  ? 'bg-primary text-white hover:bg-indigo-700' 
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               ]"
             >
@@ -137,7 +137,7 @@
           <div class="flex justify-between">
             <button 
               @click="prevStep" 
-              class="text-indigo-600 py-2 px-4 hover:text-indigo-800 focus:outline-none"
+              class="text-primary py-2 px-4 hover:text-indigo-800 focus:outline-none"
             >
               Indietro
             </button>
@@ -148,7 +148,7 @@
               :class="[
                 'py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
                 gender && !isLoading
-                  ? 'bg-indigo-600 text-white hover:bg-indigo-700' 
+                  ? 'bg-primary text-white hover:bg-indigo-700' 
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               ]"
             >

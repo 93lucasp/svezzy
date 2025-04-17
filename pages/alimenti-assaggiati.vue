@@ -2,7 +2,7 @@
   <div class="bg-gray-50 min-h-screen pb-6">
     <!-- Header -->
     <div class="bg-white px-4 py-4 shadow-sm">
-      <h1 class="text-xl font-semibold text-indigo-600">Alimenti Assaggiati</h1>
+      <h1 class="text-xl font-semibold text-primary">Alimenti Assaggiati</h1>
       
       <!-- Selezione bambino -->
       <div v-if="bambini.length > 0" class="mt-4">
@@ -75,7 +75,7 @@
         <div class="mt-4">
           <button 
             @click="navigateTo('/alimenti')" 
-            class="inline-flex items-center text-indigo-600 hover:text-indigo-800"
+            class="inline-flex items-center text-primary hover:text-indigo-800"
           >
             <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
@@ -123,7 +123,7 @@
             </button>
             <button 
               @click="saveNote" 
-              class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
+              class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
             >
               Salva
             </button>

@@ -1,7 +1,10 @@
 <template>
-  <div>
+  <ion-app>
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-  </div>
+  </ion-app>
 </template>
+
+<script setup>
+</script>

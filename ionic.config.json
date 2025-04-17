@@ -1,0 +1,7 @@
+{
+  "name": "svezzy",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}

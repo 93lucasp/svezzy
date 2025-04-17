@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col items-center justify-center px-4 bg-gray-50">
     <div class="w-full max-w-md">
-      <h1 class="text-3xl font-bold text-center text-indigo-600 mb-8">Svezzy</h1>
+      <h1 class="text-3xl font-bold text-center text-primary mb-8">Svezzy</h1>
       
       <div class="bg-white p-8 rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold text-center mb-6">Recupera Password</h2>
@@ -29,7 +29,7 @@
             
             <button 
               type="submit" 
-              class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              class="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               :disabled="isLoading"
             >
               <span v-if="isLoading">Caricamento...</span>
@@ -53,7 +53,7 @@
         </div>
         
         <div class="mt-6 text-center">
-          <button @click="navigateToLogin" class="text-indigo-600 hover:text-indigo-800 font-medium">
+          <button @click="navigateToLogin" class="text-primary hover:text-indigo-800 font-medium">
             Torna al login
           </button>
         </div>

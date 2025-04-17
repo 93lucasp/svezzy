@@ -1,0 +1,13 @@
+{
+  "appId": "it.logixsoftware.svezzy",
+  "appName": "svezzy",
+  "webDir": "dist",
+  "plugins": {
+    "Keyboard": {
+      "resize": "ionic"
+    },
+    "CapacitorCookies": {
+      "enabled": true
+    }
+  }
+}

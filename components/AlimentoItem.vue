@@ -8,7 +8,7 @@
           :id="`alimento-${alimento.id}`" 
           :checked="alimento.assaggiato"
           @change="$emit('toggle', alimento.id)"
-          class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+          class="h-5 w-5 text-primary border-gray-300 rounded focus:ring-indigo-500"
         />
       </div>
       
@@ -31,7 +31,7 @@
       <!-- Pulsante nota -->
       <button 
         @click="$emit('add-note', alimento)" 
-        class="ml-3 flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full text-gray-400 hover:text-indigo-600 hover:bg-indigo-50"
+        class="ml-3 flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full text-gray-400 hover:text-primary hover:bg-indigo-50"
       >
         <svg 
           :class="[
@@ -55,7 +55,7 @@
       <!-- Pulsante espandi -->
       <button 
         @click="isExpanded = !isExpanded" 
-        class="ml-2 flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full text-gray-400 hover:text-indigo-600 hover:bg-indigo-50"
+        class="ml-2 flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full text-gray-400 hover:text-primary hover:bg-indigo-50"
       >
         <svg 
           :class="['h-5 w-5', isExpanded ? 'transform rotate-180' : '']" 
@@ -79,7 +79,7 @@
       <div v-if="alimento.descrizione" class="text-sm bg-blue-50 rounded-md p-3 mb-2 text-gray-600 border-l-2 border-blue-300">
         {{ alimento.descrizione }}
       </div>
-      <div v-if="alimento.nota_personale" class="text-sm bg-gray-50 rounded-md p-3 text-gray-600 border-l-2 border-indigo-300">
+      <div v-if="alimento.nota_personale" class="text-sm bg-gray-50 rounded-md p-3 text-gray-600 border-l-2 border-yellow-500">
         <div class="font-medium text-xs mb-1 text-gray-500">Note personali:</div>
         {{ alimento.nota_personale }}
       </div>

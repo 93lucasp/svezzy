@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">svezzy</string>
+    <string name="title_activity_main">svezzy</string>
+    <string name="package_name">it.logixsoftware.svezzy</string>
+    <string name="custom_url_scheme">it.logixsoftware.svezzy</string>
+</resources>

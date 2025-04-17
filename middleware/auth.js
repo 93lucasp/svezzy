@@ -1,51 +1,40 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const { initializeUser, isUserLoaded } = useSupabaseUserInitialization()
   const user = useSupabaseUser()
-  
-  // Lista delle pagine accessibili senza autenticazione
-  const publicPages = ['/', '/registrazione', '/recupero-password']
-  const isPublicPage = publicPages.includes(to.path)
-  const homePage = '/alimenti'
-  
-  // Verifica se l'utente ha già visto la welcome page
-  const hasSeenWelcome = useCookie('has-seen-welcome').value === 'true'
-  
-  // Gestione per la welcome page
-  if (to.path !== '/welcome' && !hasSeenWelcome) {
-    return navigateTo('/welcome')
-  }
-  
-  // Se l'utente sta già andando alla welcome page, permettigli di accedervi
-  if (to.path === '/welcome') {
-    return
-  }
 
-  // Attesa del caricamento dello stato utente
+  console.debug('[auth middleware] Current route:', to.path)
+  console.debug('[auth middleware] User state:', user.value === undefined ? 'loading' : user.value ? 'authenticated' : 'unauthenticated')
+
+  // Assicurati che lo stato dell'utente sia caricato
   if (!isUserLoaded.value) {
+    console.debug('[auth middleware] Initializing user...')
     await initializeUser()
   }
 
-  // Se l'autenticazione è ancora in caricamento, continua la navigazione
+  // Se lo stato dell'utente è ancora undefined, consenti alla pagina di gestire il caricamento
   if (user.value === undefined) {
+    console.debug('[auth middleware] Auth still loading, deferring navigation...')
     return
   }
 
-  // Gestione della navigazione in base allo stato di autenticazione
-  const isAuthenticated = !!user.value
-
-  if (isAuthenticated) {
-    // Utente autenticato che tenta di accedere a pagine pubbliche viene reindirizzato alla home
-    if (isPublicPage) {
-      return navigateTo(homePage)
+  // Gestione utenti autenticati
+  if (user.value) {
+    if (to.path === '/login' || to.path === '/signup') {
+      console.debug('[auth middleware] Authenticated user attempting to access auth page, redirecting to home')
+      return navigateTo('/')
     }
-    // Altrimenti può accedere alle pagine protette
+    console.debug('[auth middleware] User authenticated, allowing access to:', to.path)
     return
-  } else {
-    // Utente non autenticato può accedere solo alle pagine pubbliche
-    if (isPublicPage) {
-      return
-    }
-    // Altrimenti viene reindirizzato alla pagina di login
-    return navigateTo('/')
   }
+
+  // Gestione utenti non autenticati
+  if (to.path === '/login' || to.path === '/signup') {
+    console.debug('[auth middleware] Allowing unauthenticated access to auth page:', to.path)
+    return
+  }
+
+  // Reindirizza utenti non autenticati alla pagina di login, preservando la destinazione
+  console.debug('[auth middleware] No user found, redirecting to /login...')
+  // return navigateTo(`/login?redirect=${encodeURIComponent(to.fullPath)}`)
+  return navigateTo('/login')
 })
